@@ -41,10 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Authorization': 'Bearer sk-ijvlalsaguexevmessiyvbfefwaitfefbeaywipgkdbumqfm'
                 },
                 body: JSON.stringify({
-                    model: "deepseek-ai/DeepSeek-V2.5",
+                    model: 'deepseek-ai/DeepSeek-V2.5',
                     messages: [{ role: 'user', content: message }],
                     temperature: 0.7,
-                    max_tokens: 1000
+                    max_tokens: 2000,
+                    stream: false
                 })
             });
 
