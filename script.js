@@ -34,15 +34,17 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         try {
-            const response = await fetch('/api/chat', {
+            const response = await fetch('https://api.siliconflow.cn/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${process.env.API_KEY}`
+                    'Authorization': 'Bearer sk-ijvlalsaguexevmessiyvbfefwaitfefbeaywipgkdbumqfm'
                 },
-                body: JSON.stringify({ 
-                    message,
-                    api_url: process.env.API_URL 
+                body: JSON.stringify({
+                    model: "deepseek-ai/DeepSeek-V2.5",
+                    messages: [{ role: 'user', content: message }],
+                    temperature: 0.7,
+                    max_tokens: 1000
                 })
             });
 
