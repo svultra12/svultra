@@ -7,6 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: production
     steps:
     - uses: actions/checkout@v2
     
@@ -20,6 +21,9 @@ jobs:
       
     - name: Build and Deploy
       uses: peaceiris/actions-gh-pages@v3
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
+        API_URL: ${{ secrets.API_URL }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: .
