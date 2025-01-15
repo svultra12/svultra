@@ -75,4 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
             sendMessage();
         }
     });
+
+    // 添加联系方式点击处理
+    const contactLink = document.querySelector('a[href="#contact"]');
+    const contactContainer = document.getElementById('contact');
+    
+    contactLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (contactContainer.style.display === 'none') {
+            contactContainer.style.display = 'block';
+        } else {
+            contactContainer.style.display = 'none';
+        }
+    });
 });

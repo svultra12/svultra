@@ -7,6 +7,30 @@
     <title>个人主页 - AI助手</title>
     <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .contact-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .contact-info {
+            text-align: center;
+        }
+
+        .contact-info h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -57,6 +81,13 @@
         <div class="chat-input">
             <textarea id="userInput" placeholder="输入您的问题..."></textarea>
             <button id="sendButton">发送</button>
+        </div>
+    </div>
+
+    <div class="contact-container" id="contact" style="display: none;">
+        <div class="contact-info">
+            <h2>联系方式</h2>
+            <p>手机：19273844624</p>
         </div>
     </div>
 
