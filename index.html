@@ -1,46 +1,66 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <base href="/svultra/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>个人主页 - AI助手</title>
     <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .contact-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+    <script>
+        // 自动启动服务器和工具
+        window.addEventListener('DOMContentLoaded', async function() {
+            const statusMessage = document.getElementById('status-message');
+            if (!statusMessage) return;
 
-        .contact-info {
-            text-align: center;
-        }
+            // 检查是否在本地环境
+            const isLocal = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1';
 
-        .contact-info h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .contact-info p {
-            font-size: 18px;
-            color: #666;
-        }
-    </style>
+            if (isLocal) {
+                try {
+                    // 本地环境下的服务器检查逻辑
+                    const response = await fetch('http://localhost:3000/check-server');
+                    if (!response.ok) {
+                        const startProcess = new ActiveXObject('WScript.Shell');
+                        startProcess.Run('python run_tool.py', 0, false);
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    }
+                    statusMessage.textContent = '服务器已启动';
+                    statusMessage.className = 'status-message success';
+                } catch (error) {
+                    console.error('Error:', error);
+                    statusMessage.textContent = '请确保已安装 Python 和 Node.js，然后刷新页面';
+                    statusMessage.className = 'status-message error';
+                }
+            } else {
+                // GitHub Pages 环境下的提示
+                statusMessage.textContent = '请下载并在本地运行此工具';
+                statusMessage.className = 'status-message info';
+                
+                // 添加下载按钮
+                const downloadBtn = document.createElement('button');
+                downloadBtn.className = 'run-btn';
+                downloadBtn.textContent = '下载工具';
+                downloadBtn.onclick = () => {
+                    window.location.href = 'https://github.com/svultra12/svultra/archive/refs/heads/main.zip';
+                };
+                statusMessage.parentNode.insertBefore(downloadBtn, statusMessage.nextSibling);
+            }
+        });
+    </script>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-content">
             <div class="logo">我的主页</div>
             <div class="nav-links">
-                <a href="#home">首页</a>
-                <a href="#about">关于我</a>
-                <a href="#chat">AI对话</a>
-                <a href="#contact">联系我</a>
+                <a href="#home" onclick="scrollToSection('home')">首页</a>
+                <a href="大鱼海棠/大鱼海棠.html">电影简介</a>
+                <a href="#music" onclick="scrollToSection('music')">音乐</a>
+                <a href="#video" onclick="scrollToSection('video')">影视</a>
+                <a href="#about" onclick="scrollToSection('about')">关于我</a>
+                <a href="#chat" onclick="scrollToSection('chat')">AI对话</a>
+                <a href="#contact" onclick="scrollToSection('contact')">联系我</a>
             </div>
             <div class="menu-toggle">
                 <i class="fas fa-bars"></i>
@@ -48,47 +68,182 @@
         </div>
     </nav>
 
-    <div class="carousel">
-        <div class="carousel-container">
-            <img src="./images/微信图片_20241127104503.jpg" alt="展示图片1" class="active">
-            <img src="./images/微信图片_20241225090611.jpg" alt="展示图片2">
-            <img src="./images/微信图片_20241225090618.jpg" alt="展示图片3">
-            <img src="./images/微信图片_20241225092431.png" alt="展示图片4">
-            <img src="./images/微信图片_20241225104707.jpg" alt="展示图片5">
-            <img src="./images/微信图片_20250109213526.png" alt="展示图片6">
-        </div>
-        <button class="carousel-btn prev">&lt;</button>
-        <button class="carousel-btn next">&gt;</button>
-        <div class="carousel-dots"></div>
-    </div>
+    <nav class="side-nav">
+        <h3>快速导航</h3>
+        <ul class="side-nav-menu">
+            <li class="side-nav-item" onclick="scrollToSection('home')">
+                <i class="fas fa-home"></i>首页
+            </li>
+            <li class="side-nav-item" onclick="scrollToSection('about')">
+                <i class="fas fa-user"></i>关于我
+            </li>
+            <li class="side-nav-item" onclick="scrollToSection('music')">
+                <i class="fas fa-music"></i>音乐
+            </li>
+            <li class="side-nav-item" onclick="scrollToSection('video')">
+                <i class="fas fa-video"></i>影视
+            </li>
+            <li class="side-nav-item" onclick="scrollToSection('chat')">
+                <i class="fas fa-comments"></i>AI对话
+            </li>
+            <li class="side-nav-item" onclick="scrollToSection('contact')">
+                <i class="fas fa-envelope"></i>联系我
+            </li>
+        </ul>
+    </nav>
 
-    <section class="about-section" id="about">
-        <h2>关于我</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <p>这里是关于我的介绍...</p>
+    <div class="main-content">
+        <section id="home">
+            <div class="carousel">
+                <div class="carousel-container">
+                    <img src="images/微信图片_20241127104503.jpg" alt="展示图片1" class="active">
+                    <img src="images/微信图片_20241225090611.jpg" alt="展示图片2">
+                    <img src="images/微信图片_20241225090618.jpg" alt="展示图片3">
+                    <img src="images/微信图片_20241225092431.png" alt="展示图片4">
+                    <img src="images/微信图片_20241225104707.jpg" alt="展示图片5">
+                    <img src="images/微信图片_20250109213526.png" alt="展示图片6">
+                </div>
+                <button class="carousel-btn prev">&lt;</button>
+                <button class="carousel-btn next">&gt;</button>
+                <div class="carousel-dots"></div>
+            </div>
+        </section>
+
+        <section class="about-section" id="about">
+            <h2>关于我</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>个人简介</h3>
+                    <p>你好！我是一名充满热情的开发者，专注于前端开发和人工智能应用。</p>
+                    
+                    <h3>技能特长</h3>
+                    <div class="skills">
+                        <div class="skill-item">
+                            <span class="skill-label">前端开发</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-label">AI 应用</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-label">UI/UX 设计</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="80%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>项目经验</h3>
+                    <div class="projects">
+                        <div class="project-item">
+                            <h4>AI 聊天助手</h4>
+                            <p>基于深度学习的智能对话系统，支持多轮对话和上下文理解。</p>
+                        </div>
+                        <div class="project-item">
+                            <h4>个人主页设计</h4>
+                            <p>响应式设计的个人展示网站，整合多种现代网页技术。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="chat-container" id="chat">
+            <div class="chat-header">
+                <h1>AI 聊天助手</h1>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- 消息将在这里动态添加 -->
+            </div>
+            <div class="chat-input">
+                <textarea id="userInput" placeholder="输入您的问题..."></textarea>
+                <button id="sendButton">发送</button>
             </div>
         </div>
-    </section>
 
-    <div class="chat-container" id="chat">
-        <div class="chat-header">
-            <h1>AI 聊天助手</h1>
+        <div class="contact-container" id="contact" style="display: none;">
+            <div class="contact-info">
+                <h2>联系方式</h2>
+                <p>手机：19273844624</p>
+            </div>
         </div>
-        <div class="chat-messages" id="chatMessages">
-            <!-- 消息将在这里动态添加 -->
-        </div>
-        <div class="chat-input">
-            <textarea id="userInput" placeholder="输入您的问题..."></textarea>
-            <button id="sendButton">发送</button>
-        </div>
-    </div>
 
-    <div class="contact-container" id="contact" style="display: none;">
-        <div class="contact-info">
-            <h2>联系方式</h2>
-            <p>手机：19273844624</p>
-        </div>
+        <section id="music" class="music-section">
+            <h2>音乐推荐</h2>
+            <!-- 音乐图片轮播 -->
+            <div class="music-carousel">
+                <div class="music-carousel-container">
+                    <img src="images/music/music1.jpg" alt="音乐图片1" class="active">
+                    <img src="images/music/music2.jpg" alt="音乐图片2">
+                    <img src="images/music/music3.jpg" alt="音乐图片3">
+                </div>
+                <button class="music-carousel-btn prev">&lt;</button>
+                <button class="music-carousel-btn next">&gt;</button>
+                <div class="music-carousel-dots"></div>
+            </div>
+            <div class="music-list">
+                <h3>抖音热歌推荐</h3>
+                <ul>
+                    <li>
+                        <a href="https://tools.liumingye.cn/music/?page=searchPage#/search/m/song/爱你" target="_blank">爱你 - 王心凌</a>
+                    </li>
+                    <li>
+                        <a href="https://tools.liumingye.cn/music/?page=searchPage#/search/m/song/Letting Go" target="_blank">Letting Go - 蔡健雅</a>
+                    </li>
+                    <li>
+                        <a href="https://tools.liumingye.cn/music/?page=searchPage#/search/m/song/红色高跟鞋" target="_blank">红色高跟鞋 - 蔡健雅</a>
+                    </li>
+                    <li>
+                        <a href="https://tools.liumingye.cn/music/?page=searchPage#/search/m/song/可惜没如果" target="_blank">可惜没如果 - 林俊杰</a>
+                    </li>
+                    <li>
+                        <a href="https://tools.liumingye.cn/music/?page=searchPage#/search/m/song/修炼爱情" target="_blank">修炼爱情 - 林俊杰</a>
+                    </li>
+                    <li>
+                        <a href="https://tools.liumingye.cn/music/?page=searchPage#/playlist/140814?name=抖音热歌：抓耳节奏火爆全网" target="_blank" class="view-more">查看更多抖音热歌 &raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="video" class="video-section">
+            <h2>影视工具</h2>
+            <div class="video-tools">
+                <div class="tool-description">
+                    <h3>视频解析工具</h3>
+                    <p>点击下方按钮运行视频解析工具</p>
+                    <button class="run-btn" onclick="runVideoTool()">运行工具</button>
+                    <div id="status-message" class="status-message"></div>
+                </div>
+                <div class="usage-guide">
+                    <h4>使用说明</h4>
+                    <ol>
+                        <li>点击"运行工具"按钮</li>
+                        <li>在打开的工具窗口中输入视频链接</li>
+                        <li>点击解析即可观看视频</li>
+                    </ol>
+                    <p class="note">注意：请确保已安装 Python 环境</p>
+                </div>
+                <div class="popular-videos">
+                    <h3>热门推荐</h3>
+                    <div class="video-grid">
+                        <div class="video-item">
+                            <img src="images/video-thumbnails/1.jpg" alt="视频缩略图">
+                            <h4>热门电影</h4>
+                        </div>
+                        <div class="video-item">
+                            <img src="images/video-thumbnails/2.jpg" alt="视频缩略图">
+                            <h4>精选剧集</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <div class="social-links">
@@ -126,5 +281,36 @@
     </footer>
 
     <script src="./script.js"></script>
+
+    <div class="image-viewer" id="imageViewer">
+        <div class="image-viewer-content">
+            <img src="" alt="大图预览">
+            <button class="close-btn">&times;</button>
+        </div>
+    </div>
+
+    <script>
+    function scrollToSection(sectionId) {
+        event.preventDefault();
+        const section = document.getElementById(sectionId);
+        const navHeight = document.querySelector('.navbar').offsetHeight;
+        const targetPosition = section.offsetTop - navHeight;
+        
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }
+
+    // 页面加载完成后检查 URL 中的锚点
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.hash) {
+            const sectionId = window.location.hash.substring(1);
+            setTimeout(() => {
+                scrollToSection(sectionId);
+            }, 100);
+        }
+    });
+    </script>
 </body>
 </html>

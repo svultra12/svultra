@@ -1,2 +1,21 @@
+# Node
 node_modules/
-.DS_Store 
+package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Project specific
+video/logs/
+video/start_tool.bat
+
+.DS_Store

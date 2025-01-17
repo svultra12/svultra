@@ -405,76 +405,81 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 视频工具功能
-    function initVideoTool() {
+    function runVideoTool() {
         const statusMessage = document.getElementById('status-message');
-        const runBtn = document.querySelector('.run-btn');
+        statusMessage.textContent = '正在启动视频解析工具...';
+        statusMessage.style.display = 'block';
+        statusMessage.className = 'status-message info';
 
-        if (!runBtn) return;
-
-        runBtn.addEventListener('click', async function() {
-            if (this.disabled) return;
-
-            try {
-                this.disabled = true;
-                this.textContent = '正在启动...';
-                statusMessage.textContent = '正在启动工具...';
-                statusMessage.className = 'status-message info';
-
-                // 使用Node.js的child_process执行Python脚本
-                const { exec } = require('child_process');
-                const pythonScriptPath = 'video/video_parser.py';
-                
-                exec(`start python ${pythonScriptPath}`, { shell: true }, (error, stdout, stderr) => {
-                    if (error) {
-                        throw new Error(`执行错误: ${error.message}`);
-                    }
-                    if (stderr) {
-                        throw new Error(`脚本错误: ${stderr}`);
-                    }
-
-                    statusMessage.textContent = '工具已启动！';
-                    statusMessage.className = 'status-message success';
-                    setTimeout(() => {
-                        this.textContent = '运行工具';
-                        this.disabled = false;
-                        statusMessage.style.display = 'none';
-                    }, 2000);
-                });
-            } catch (error) {
-                console.error('Error:', error);
-                statusMessage.textContent = '启动失败，请检查系统设置';
-                statusMessage.className = 'status-message error';
-                this.textContent = '运行工具';
-                this.disabled = false;
+        fetch('/run-video-tool', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('网络请求失败');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                statusMessage.textContent = '工具已启动，请在新窗口中操作';
+                statusMessage.className = 'status-message success';
+            } else {
+                throw new Error(data.message || '启动失败，请确保已安装Python环境');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            statusMessage.textContent = `错误: ${error.message}`;
+            statusMessage.className = 'status-message error';
         });
     }
 
-    // 页面加载完成后初始化所有功能
-    document.addEventListener('DOMContentLoaded', function() {
-        initMusicCarousel();
-        initVideoTool();
-    });
-});
+    async function startServer() {
+        const statusMessage = document.getElementById('status-message');
+        statusMessage.textContent = '正在启动服务器...';
+        statusMessage.style.display = 'block';
+        statusMessage.className = 'status-message info';
 
-function runVideoTool() {
-    const statusMessage = document.getElementById('status-message');
-    statusMessage.textContent = '正在启动视频解析工具...';
+        try {
+            const response = await fetch('/start-server', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-    // 使用fetch调用后端接口来执行Python脚本
-    fetch('/run-video-tool', {
-        method: 'POST'
-    })
-    .then(response => response.json())  
-    .then(data => {
-        if(data.success) {
-            statusMessage.textContent = '视频解析工具已启动';
-        } else {
-            statusMessage.textContent = '启动失败: ' + data.error;
+            if (!response.ok) {
+                throw new Error('网络请求失败');
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                statusMessage.textContent = data.message || '服务器已启动';
+                statusMessage.className = 'status-message success';
+                // 启用运行工具按钮
+                document.querySelector('button[onclick="runVideoTool()"]').disabled = false;
+                // 隐藏启动服务器按钮
+                document.querySelector('button[onclick="startServer()"]').style.display = 'none';
+            } else {
+                throw new Error(data.message || '服务器启动失败');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            statusMessage.textContent = `错误: ${error.message}`;
+            statusMessage.className = 'status-message error';
         }
-    })
-    .catch(error => {
-        statusMessage.textContent = '启动失败,请确保已安装Python环境';
-        console.error('Error:', error);
-    });
-}
+    }
+
+    // 初始化所有功能
+    initializeCarousel();
+    initializeImageViewer();
+    initMusicCarousel();
+    runVideoTool(); // 直接在这里调用，而不是在另一个 DOMContentLoaded 事件中
+
+    // 自动启动服务器
+    startServer();
+});

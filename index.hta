@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>启动器</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <hta:application
+        id="starter"
+        applicationname="Web Starter"
+        border="none"
+        caption="no"
+        showintaskbar="no"
+        windowstate="minimize"
+        innerborder="no"
+        navigable="no"
+        scroll="no"
+        selection="no"
+    >
+    <script>
+        window.resizeTo(0, 0);
+        var shell = new ActiveXObject("WScript.Shell");
+        shell.Run("python run_tool.py", 0, false);
+        window.close();
+    </script>
+</head>
+<body>
+    正在启动...
+</body>
+</html> 

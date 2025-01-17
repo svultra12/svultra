@@ -1,0 +1,150 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: #e2bceb;
+}
+.qb {
+  width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+}
+.qb_1 {
+  width: 100%;
+  height: 60px;
+  background-color: #be5d92;
+}
+.qb_1 ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  list-style: none;
+}
+.qb_1 ul li {
+  text-align: center;
+}
+.qb_1 ul li a {
+  color: white;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  border-radius: 25px;
+  text-decoration: none;
+}
+.qb_1 ul li a.active, .qb_1 ul li a:hover {
+  color: #be5d92;
+  font-weight: bold;
+  background-color: #ffffff;
+}
+.qb_2 {
+  padding: 20px;
+}
+.qb_3 img {
+  width: 100%;
+}
+.qb_4 {
+  margin: 20px 0;
+}
+.qb_4 h1 {
+  color: white;
+  font-size: 24px;
+  font-weight: 400;
+  padding: 10px 20px;
+  border-radius: 40px;
+  display: inline-block;
+  background-color: #be5d92;
+}
+.qb_4_1 p {
+  margin-bottom: 30px;
+}
+.qb_4_1 ul {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+}
+.qb_4_1 ul li {
+  width: 23%;
+  border-radius: 5px;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+.qb_4_1 ul li::before {
+  content: '';
+  display: block;
+  padding-top: 100%; 
+}
+.qb_4_1 ul li img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.qb_4_1 ul li img:hover {
+  transform: scale(1.1);
+}
+.qb_4_1 {
+  padding: 20px;
+  margin-top: 20px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  color: white;
+  background-color: #be5d92;
+}
+.bt {
+  color: white;
+  font-size: 24px;
+  font-weight: 400;
+  padding: 10px 20px;
+  border-radius: 40px;
+  display: inline-block;
+  background-color: #be5d92;
+}
+.qb_5, .qb_6 {
+  margin-top: 40px;
+}
+.qb_5 ul, .qb_6 ul {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+}
+.qb_5 ul li, .qb_6 ul li {
+  width: 48%;
+  margin: 20px 0;
+}
+.qb_5 ul li video, .qb_6 ul li img {
+  width: 100%;
+  object-fit: cover;
+}
+.qq {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.qq img {
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.qq img:hover {
+  transform: scale(1.1);
+}
+.qb_7 {
+  width: 100%;
+  color: white;
+  text-align: center;
+  height: 60px;
+  line-height: 60px;
+  background-color: #be5d92;
+}
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

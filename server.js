@@ -1,45 +1,61 @@
 const express = require('express');
+const { exec } = require('child_process');
+const path = require('path');
 const cors = require('cors');
-const axios = require('axios');
-require('dotenv').config();
 
 const app = express();
+const port = 3000;
+
+// 允许跨域请求
 app.use(cors());
-app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('.'));
 
-const API_KEY = process.env.SILICON_API_KEY;
-const BASE_URL = 'https://api.siliconflow.cn/v1';
+let serverRunning = false;
 
-app.post('/api/chat', async (req, res) => {
-    try {
-        const { message } = req.body;
-        
-        const response = await axios.post(`${BASE_URL}/chat/completions`, {
-            model: 'deepseek-ai/DeepSeek-V2.5',
-            messages: [
-                { role: 'user', content: message }
-            ],
-            temperature: 0.7,
-            max_tokens: 1000
-        }, {
-            headers: {
-                'Authorization': `Bearer ${API_KEY}`,
-                'Content-Type': 'application/json'
-            }
+// 检查服务器状态的路由
+app.get('/check-server', (req, res) => {
+    res.json({ 
+        success: true,
+        running: serverRunning 
+    });
+});
+
+// 运行视频工具的路由
+app.post('/run-video-tool', (req, res) => {
+    if (!serverRunning) {
+        res.json({
+            success: false,
+            message: '请等待服务器启动完成'
         });
-
-        res.json(response.data);
-    } catch (error) {
-        console.error('Error details:', error.response?.data || error.message);
-        res.status(500).json({ 
-            error: '服务器错误',
-            details: error.response?.data || error.message 
-        });
+        return;
     }
+
+    const pythonScript = path.join(__dirname, 'video', 'video_parser.py');
+    const pythonCommand = process.platform === 'win32' ? 'python' : 'python3';
+    
+    exec(`${pythonCommand} "${pythonScript}"`, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`执行错误: ${error}`);
+            res.json({ 
+                success: false, 
+                message: `启动失败: ${error.message}` 
+            });
+            return;
+        }
+        res.json({ success: true });
+    });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        success: false,
+        message: '服务器内部错误'
+    });
 });
+
+app.listen(port, () => {
+    console.log(`服务器运行在 http://localhost:${port}`);
+    serverRunning = true;
+});
+

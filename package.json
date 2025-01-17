@@ -1,13 +1,16 @@
 {
-  "name": "svultra",
+  "name": "video-parser-web",
   "version": "1.0.0",
-  "description": "Personal Website with AI Chat Assistant",
-  "homepage": "https://svultra12.github.io/svultra",
+  "description": "Video Parser Web Interface",
+  "main": "server.js",
   "scripts": {
-    "predeploy": "npm install",
-    "deploy": "gh-pages -d ."
+    "start": "node server.js"
   },
-  "devDependencies": {
-    "gh-pages": "^6.3.0"
+  "dependencies": {
+    "express": "^4.17.1",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=12.0.0"
   }
 }
