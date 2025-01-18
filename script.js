@@ -153,53 +153,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function sendMessage(retryCount = 3) {
-        const message = userInput.value.trim();
-        if (!message) return;
-
-        addMessage(message, true);
-        userInput.value = '';
-        
-        const loadingMessage = document.createElement('div');
-        loadingMessage.className = 'message ai-message';
-        loadingMessage.textContent = '正在思考...';
-        chatMessages.appendChild(loadingMessage);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        const messageText = userInput.value.trim();
+        if (!messageText) return;
 
         try {
-            const response = await fetch('https://api.siliconflow.cn/v1/chat/completions', {
+            addMessage(messageText, true);
+            userInput.value = '';
+
+            const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer sk-ijvlalsaguexevmessiyvbfefwaitfefbeaywipgkdbumqfm'
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    model: 'deepseek-ai/DeepSeek-V2.5',
-                    messages: [{ role: 'user', content: message }],
-                    temperature: 0.7,
-                    max_tokens: 2000
-                })
+                body: JSON.stringify({ message: messageText })
             });
 
             if (!response.ok) {
-                if (retryCount > 0) {
-                    setTimeout(() => sendMessage(retryCount - 1), 1000);
-                    return;
-                }
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error('API request failed');
             }
 
             const data = await response.json();
-            chatMessages.removeChild(loadingMessage);
-            
-            if (data.choices && data.choices[0] && data.choices[0].message) {
-                addMessage(data.choices[0].message.content);
-            } else {
-                throw new Error('Invalid response format');
-            }
+            const aiResponse = data.content || '抱歉，我现在无法回答。';
+            addMessage(aiResponse, false);
         } catch (error) {
             console.error('Error:', error);
-            chatMessages.removeChild(loadingMessage);
-            addMessage('抱歉，发生了错误，请稍后重试。');
+            if (retryCount > 0) {
+                setTimeout(() => sendMessage(retryCount - 1), 1000);
+            } else {
+                addMessage('抱歉，发生了错误，请稍后重试。', false);
+            }
         }
     }
 
