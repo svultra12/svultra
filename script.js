@@ -163,7 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${process.env.TOKEN}`
                 },
                 body: JSON.stringify({ message: messageText })
             });
