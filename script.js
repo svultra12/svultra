@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer sk-ijvlalsaguexevmessiyvbfefwaitfefbeaywipgkdbumqfm'
+                    'Authorization': `Bearer ${process.env.API_KEY || ''}`
                 },
                 body: JSON.stringify({
                     model: 'deepseek-ai/DeepSeek-V2.5',
