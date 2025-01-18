@@ -3,106 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="个人主页展示，包含AI助手、影视资源、音乐推荐等功能">
+    <meta name="keywords" content="个人主页,AI助手,影视资源,音乐推荐">
+    <meta property="og:title" content="个人主页 - AI助手">
+    <meta property="og:description" content="个人主页展示，包含AI助手、影视资源、音乐推荐等功能">
+    <meta property="og:image" content="https://example.com/og-image.jpg">
+    <meta property="og:url" content="https://example.com">
+    <meta name="twitter:card" content="summary_large_image">
+    
     <title>个人主页 - AI助手</title>
+    
+    <!-- Preload关键资源 -->
+    <link rel="preload" href="./styles.css" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+    <link rel="preload" href="./script.js" as="script">
+    
+    <!-- 预连接重要第三方资源 -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
     <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script>
-        // 自动启动服务器和工具
-        window.addEventListener('DOMContentLoaded', async function() {
-            const statusMessage = document.getElementById('status-message');
-            if (!statusMessage) return;
-
-            // 检查是否在本地环境
-            const isLocal = window.location.hostname === 'localhost' || 
-                           window.location.hostname === '127.0.0.1';
-
-            if (isLocal) {
-                try {
-                    // 本地环境下的服务器检查逻辑
-                    const response = await fetch('http://localhost:3000/check-server');
-                    if (!response.ok) {
-                        const startProcess = new ActiveXObject('WScript.Shell');
-                        startProcess.Run('python run_tool.py', 0, false);
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                    }
-                    statusMessage.textContent = '服务器已启动';
-                    statusMessage.className = 'status-message success';
-                } catch (error) {
-                    console.error('Error:', error);
-                    statusMessage.textContent = '请确保已安装 Python 和 Node.js，然后刷新页面';
-                    statusMessage.className = 'status-message error';
-                }
-            } else {
-                // GitHub Pages 环境下的提示
-                statusMessage.textContent = '请下载并在本地运行此工具';
-                statusMessage.className = 'status-message info';
-                
-                // 添加下载按钮
-                const downloadBtn = document.createElement('button');
-                downloadBtn.className = 'run-btn';
-                downloadBtn.textContent = '下载工具';
-                downloadBtn.onclick = () => {
-                    window.location.href = 'https://github.com/svultra12/svultra/archive/refs/heads/main.zip';
-                };
-                statusMessage.parentNode.insertBefore(downloadBtn, statusMessage.nextSibling);
-            }
-        });
+    
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "个人主页",
+      "url": "https://example.com",
+      "description": "个人主页展示，包含AI助手、影视资源、音乐推荐等功能"
+    }
     </script>
 </head>
 <body>
-    <nav class="navbar">
+    <!-- 跳过导航链接 -->
+    <a href="#main-content" class="skip-link">跳至主要内容</a>
+    
+    <nav class="navbar" aria-label="主导航">
         <div class="nav-content">
-            <div class="logo">我的主页</div>
-            <div class="nav-links">
-                <a href="#home">首页</a>
-                <a href="#about">关于我</a>
-                <a href="#video">视频工具</a>
-                <a href="#chat">AI对话</a>
-                <a href="#contact">联系我</a>
+            <div class="logo" role="heading" aria-level="1">我的主页</div>
+            <div class="nav-links" role="navigation">
+                <a href="#home" onclick="scrollToSection('home')" role="menuitem">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                </a>
+                <a href="大鱼海棠/大鱼海棠.html" role="menuitem">
+                    <i class="fas fa-film"></i>
+                    <span>电影简介</span>
+                </a>
+                <a href="#music" onclick="scrollToSection('music')" role="menuitem">
+                    <i class="fas fa-music"></i>
+                    <span>音乐</span>
+                </a>
+                <a href="#video" onclick="scrollToSection('video')" role="menuitem">
+                    <i class="fas fa-video"></i>
+                    <span>影视</span>
+                </a>
+                <a href="#about" onclick="scrollToSection('about')" role="menuitem">
+                    <i class="fas fa-user"></i>
+                    <span>关于我</span>
+                </a>
+                <a href="#chat" onclick="scrollToSection('chat')" role="menuitem">
+                    <i class="fas fa-comments"></i>
+                    <span>AI对话</span>
+                </a>
+                <a href="#contact" onclick="scrollToSection('contact')" role="menuitem">
+                    <i class="fas fa-envelope"></i>
+                    <span>联系我</span>
+                </a>
             </div>
-            <div class="menu-toggle">
-                <i class="fas fa-bars"></i>
+            <div class="menu-toggle" 
+                 role="button" 
+                 aria-label="切换菜单"
+                 aria-expanded="false"
+                 tabindex="0">
+                <i class="fas fa-bars" aria-hidden="true"></i>
             </div>
+            <button class="theme-toggle"
+                    aria-label="切换主题"
+                    title="切换主题"
+                    onclick="toggleTheme()">
+                <i class="fas fa-moon" aria-hidden="true"></i>
+            </button>
         </div>
     </nav>
 
-    <nav class="side-nav">
-        <h3>快速导航</h3>
-        <ul class="side-nav-menu">
-            <li class="side-nav-item" onclick="scrollToSection('home')">
-                <i class="fas fa-home"></i>首页
-            </li>
-            <li class="side-nav-item" onclick="scrollToSection('about')">
-                <i class="fas fa-user"></i>关于我
-            </li>
-            <li class="side-nav-item" onclick="scrollToSection('music')">
-                <i class="fas fa-music"></i>音乐
-            </li>
-            <li class="side-nav-item" onclick="scrollToSection('video')">
-                <i class="fas fa-video"></i>影视
-            </li>
-            <li class="side-nav-item" onclick="scrollToSection('chat')">
-                <i class="fas fa-comments"></i>AI对话
-            </li>
-            <li class="side-nav-item" onclick="scrollToSection('contact')">
-                <i class="fas fa-envelope"></i>联系我
-            </li>
-        </ul>
-    </nav>
-
-    <div class="main-content">
+    <div class="main-content" id="main-content" role="main" aria-live="polite" aria-relevant="additions text">
         <section id="home">
             <div class="carousel">
                 <div class="carousel-container">
-                    <img src="images/微信图片_20241127104503.jpg" alt="展示图片1" class="active">
-                    <img src="images/微信图片_20241225090611.jpg" alt="展示图片2">
-                    <img src="images/微信图片_20241225090618.jpg" alt="展示图片3">
-                    <img src="images/微信图片_20241225092431.png" alt="展示图片4">
-                    <img src="images/微信图片_20241225104707.jpg" alt="展示图片5">
-                    <img src="images/微信图片_20250109213526.png" alt="展示图片6">
+                    <img src="images/微信图片_20241127104503.jpg" alt="个人主页展示图片1 - AI助手界面" class="active" loading="lazy" width="800" height="450">
+                    <img src="images/微信图片_20241225090611.jpg" alt="个人主页展示图片2 - 影视资源" loading="lazy" width="800" height="450">
+                    <img src="images/微信图片_20241225090618.jpg" alt="个人主页展示图片3 - 音乐推荐" loading="lazy" width="800" height="450">
+                    <img src="images/微信图片_20241225092431.png" alt="个人主页展示图片4 - 关于我" loading="lazy" width="800" height="450">
+                    <img src="images/微信图片_20241225104707.jpg" alt="个人主页展示图片5 - 联系信息" loading="lazy" width="800" height="450">
+                    <img src="images/微信图片_20250109213526.png" alt="个人主页展示图片6 - 社交链接" loading="lazy" width="800" height="450">
                 </div>
-                <button class="carousel-btn prev">&lt;</button>
-                <button class="carousel-btn next">&gt;</button>
+                <button class="carousel-btn prev" aria-label="上一张">&lt;</button>
+                <button class="carousel-btn next" aria-label="下一张">&gt;</button>
                 <div class="carousel-dots"></div>
             </div>
         </section>
@@ -151,7 +150,7 @@
             </div>
         </section>
 
-        <div class="chat-container" id="chat">
+        <section class="chat-container" id="chat">
             <div class="chat-header">
                 <h1>AI 聊天助手</h1>
             </div>
@@ -159,17 +158,23 @@
                 <!-- 消息将在这里动态添加 -->
             </div>
             <div class="chat-input">
-                <textarea id="userInput" placeholder="输入您的问题..."></textarea>
-                <button id="sendButton">发送</button>
+                <textarea id="userInput" 
+                          placeholder="输入您的问题..."
+                          aria-label="输入框"
+                          aria-required="true"></textarea>
+                <button id="sendButton" 
+                        aria-label="发送消息">
+                    发送
+                </button>
             </div>
-        </div>
+        </section>
 
-        <div class="contact-container" id="contact" style="display: none;">
+        <section class="contact-container" id="contact" style="display: none;">
             <div class="contact-info">
                 <h2>联系方式</h2>
                 <p>手机：19273844624</p>
             </div>
-        </div>
+        </section>
 
         <section id="music" class="music-section">
             <h2>音乐推荐</h2>
@@ -272,18 +277,61 @@
         <div class="footer-content">
             <p>&copy; 2024 个人主页. 保留所有权利.</p>
             <div class="footer-links">
-                <a href="#">隐私政策</a>
-                <a href="#">使用条款</a>
+                <a href="#" class="hover-underline">隐私政策</a>
+                <a href="#" class="hover-underline">使用条款</a>
             </div>
         </div>
     </footer>
 
-    <script src="./script.js"></script>
+    <!-- 延迟加载非关键JS -->
+    <script src="./script.js" defer></script>
+    <script>
+    // 主题切换功能
+    function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.classList.toggle('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        document.querySelector('.theme-toggle i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+    }
+
+    // 初始化主题
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 
+                          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark-theme', savedTheme === 'dark');
+        document.querySelector('.theme-toggle i').className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+
+    // 初始化减少运动设置
+    function initMotion() {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.documentElement.classList.toggle('reduced-motion', prefersReducedMotion);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initTheme();
+        initMotion();
+    });
+    </script>
+    
+    <!-- 性能监控 -->
+    <script>
+    if ('performance' in window) {
+        window.addEventListener('load', function() {
+            const timing = performance.timing;
+            console.log('页面加载时间：', timing.loadEventEnd - timing.navigationStart + 'ms');
+        });
+    }
+    </script>
 
     <div class="image-viewer" id="imageViewer">
-        <div class="image-viewer-content">
-            <img src="" alt="大图预览">
-            <button class="close-btn">&times;</button>
+        <div class="viewer-sections">
+            <div class="viewer-section prev-section" aria-label="查看上一张"></div>
+            <div class="viewer-section center-section" aria-label="关闭查看器"></div>
+            <div class="viewer-section next-section" aria-label="查看下一张"></div>
+        </div>
+        <div class="viewer-content">
+            <img src="" alt="大图预览" class="viewer-image">
         </div>
     </div>
 
@@ -291,8 +339,10 @@
     function scrollToSection(sectionId) {
         event.preventDefault();
         const section = document.getElementById(sectionId);
+        if (!section) return;
+        
         const navHeight = document.querySelector('.navbar').offsetHeight;
-        const targetPosition = section.offsetTop - navHeight;
+        const targetPosition = section.getBoundingClientRect().top + window.pageYOffset - navHeight;
         
         window.scrollTo({
             top: targetPosition,
